@@ -14,6 +14,13 @@
     ```
 */
 
+/*
+    Ans: 
+        - The wrapper is passed 2 callbacks. One for read and one for write. Both are necessary for the syntax of args and hence cannot be skipped
+        - After the file is begin read, we call the cleanNreturn inside fs.readFile() and receive what it returns into input variable
+        - Input is then passed to writeFile()
+*/
+
 const fs = require('fs');
 
 function Wrapper(cb, done) {
