@@ -5,6 +5,25 @@
  */
 
 function sleep(milliseconds) {
+    return new Promise(function(resolve) {
+        let timeBefore = new Date().getTime();
+
+        while(true) {
+            let timeAfter = new Date().getTime();
+
+            if(timeAfter - timeBefore >= milliseconds) {
+                break;
+            } 
+        }
+
+        resolve();
+    })
 }
+
+function busyWait() {
+    console.log("waited long enough");
+}
+
+sleep(3000).then(busyWait);
 
 module.exports = sleep;
