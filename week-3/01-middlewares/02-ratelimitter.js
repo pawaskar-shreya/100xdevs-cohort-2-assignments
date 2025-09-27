@@ -16,12 +16,47 @@ setInterval(() => {
     numberOfRequestsForUser = {};
 }, 1000)
 
+
+function doesIdExist(id) {
+  
+  let allKeys = Object.keys(numberOfRequestsForUser);
+  let index = allKeys.indexOf(id);                        // returns the index at which the id exists
+
+  if(index == -1) {
+    numberOfRequestsForUser[id] = 1;
+  } else {
+    numberOfRequestsForUser[id]++;
+  }
+}
+
+function rateLimiter(req, res, next) {
+
+  for(let key in numberOfRequestsForUser) {
+    if(numberOfRequestsForUser[key] >= 5) {
+      res.status(404).send("too many requests");
+      return;
+    }
+  }
+
+  next();
+}
+
+app.use(rateLimiter);
+
 app.get('/user', function(req, res) {
+  const id = req.headers['user-id'];               // syntax to collect key value pairs from headers. it is HEADERS AND NOT HEADER
+  doesIdExist(id);
+  
   res.status(200).json({ name: 'john' });
 });
 
 app.post('/user', function(req, res) {
+  const id = req.headers['user-id'];
+  doesIdExist(id);
+
   res.status(200).json({ msg: 'created dummy user' });
 });
+
+app.listen(3000);
 
 module.exports = app;
