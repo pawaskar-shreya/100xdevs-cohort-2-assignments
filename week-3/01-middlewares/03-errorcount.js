@@ -34,6 +34,7 @@ app.use(function(req, res, next) {
   res.status(404).json({
     msg : "Bad route :("
   })
+  next();
 })
 
 app.use(function(err, req, res, next) {
@@ -41,7 +42,6 @@ app.use(function(err, req, res, next) {
   res.status(404).json({
     msg : "There is an exception"
   });
-
   next();
 })
 
