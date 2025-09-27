@@ -17,5 +17,45 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 
+app.use(express.json());
+const port = 3000;
+
+
+
+// All file names present in ./files
+app.get('/files', function(req, res) {
+  const allFiles = fs.readdirSync('./files');
+
+  if(allFiles.length == 0) {
+    res.status(500).send("Internal Server Error");
+  } else {
+    res.status(200).json({allFiles});
+  }
+})
+
+
+// To read a specific file given name 
+app.get('/file/:filename', function(req, res) {
+  const fileName = req.params.filename;
+  const filePath = `./files/${fileName}`;
+
+  if(!fs.existsSync(filePath)) {
+    // throw new Error;
+    res.status(404).send("File not found");
+  } else {
+    fs.readFile(filePath, 'utf-8', function(err, data) {
+      res.status(200).send(data);
+    })
+  }
+})
+
+
+// If file not found 
+app.use(function(req, res) {
+  res.status(404).send("Route not found");
+})
+
+
+// app.listen(port);
 
 module.exports = app;
