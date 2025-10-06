@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const jwtPassword = 'secret';
+const zod = require('zod');
 
 
 /**
@@ -15,6 +16,22 @@ const jwtPassword = 'secret';
  */
 function signJwt(username, password) {
     // Your code here
+
+    const schema = zod.object({
+        username : zod.string().email(),
+        password : zod.string().min(6)
+    });
+
+    const parsedUser = schema.safeParse({
+        username : username,
+        password : password
+    });
+
+    if(parsedUser.success) {
+        return jwt.sign({username, password}, jwtPassword);
+    } else {
+        return null;
+    }
 }
 
 /**
@@ -27,6 +44,13 @@ function signJwt(username, password) {
  */
 function verifyJwt(token) {
     // Your code here
+
+    try {
+        let verified = jwt.verify(token, jwtPassword);
+        return true;
+    } catch(err) {
+        return false;
+    }
 }
 
 /**
@@ -38,6 +62,20 @@ function verifyJwt(token) {
  */
 function decodeJwt(token) {
     // Your code here
+
+    try {
+        let decoded = jwt.decode(token);
+
+        // This step is necessary as this is where we get an error raised. Otherwise true is returned for all 3 cases. 
+        // When we try to access payload of a jwt which is not valid, that is when we get an exception and hence err is thrown and then false is returned
+        console.log(decoded.payload);               
+
+        return true;
+    } catch(err) {
+        // console.log(err);
+        return false;
+    }
+
 }
 
 
