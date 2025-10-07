@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const secret = require("../config.js");
+require("dotenv").config();
 
 function userMiddleware(req, res, next) {
     // Implement user auth logic
@@ -11,7 +11,7 @@ function userMiddleware(req, res, next) {
         const words = token.split(" ");
         const jwtToken = words[1];
 
-        const response = jwt.verify(jwtToken, secret);
+        const response = jwt.verify(jwtToken, process.env.JWT_SECRET);
 
         if(response.username) {
             req.username = response.username        // making username accessible to all the other endpoints which might need it

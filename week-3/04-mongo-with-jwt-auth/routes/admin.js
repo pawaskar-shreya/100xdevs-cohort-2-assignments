@@ -1,9 +1,9 @@
 const { Router } = require("express");
 const adminMiddleware = require("../middleware/admin");
 const router = Router();
-const { Admin, Course, User } = require("../db/index.js");
+const { Admin, Course } = require("../db/index.js");
 const jwt = require("jsonwebtoken");
-const secret = require("../config.js");
+require("dotenv").config();
 
 // Admin Routes
 router.post('/signup', async (req, res) => {
@@ -43,7 +43,7 @@ router.post('/signin', async (req, res) => {
 
     console.log(doesAdminExist);
     if(doesAdminExist) {
-        const token = jwt.sign({username: username}, secret);
+        const token = jwt.sign({username: username}, process.env.JWT_SECRET);
         console.log(token);
         res.status(200).json({
             msg : "Admin is signed in", 

@@ -7,7 +7,7 @@
  */
 
 
-const secret = require("../config.js");
+require("dotenv").config();
 const jwt = require('jsonwebtoken');
 
 // Middleware for handling auth
@@ -22,7 +22,7 @@ function adminMiddleware(req, res, next) {
         const words = token.split(" ");
         const jwtToken = words[1];
 
-        const response = jwt.verify(jwtToken, secret);
+        const response = jwt.verify(jwtToken, process.env.JWT_SECRET);
 
         if(response.username) {
             next();
