@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 // Connect to MongoDB
 // This connection string is obtained from mongoDB cluster and then the connect button
-mongoose.connect('mongodb+srv://shreyapawaskarmain_db_user:yX34iv5N1UeEHexl@cluster0.vv8buvw.mongodb.net/course_selling_app');
+mongoose.connect(process.env.MONGO_URI);
 
 // Define schemas
 const AdminSchema = new mongoose.Schema({
